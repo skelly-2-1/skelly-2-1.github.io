@@ -6,3 +6,7 @@ My journey of learning HTML/CSS/Javascript/Emscripten
 
 # js-pingpong
 * Port of cpp-retro-games' pingpong to javascript
+
+# Links
+* cpp-retro-games: https://skelly-2-1.github.io/cpp-retro-games/cpp-retro-games.html
+* js-pingpong: https://skelly-2-1.github.io/js-pingpong/js-pingpong.html
