@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Emscripten-Generated Code</title>
+    <title>cpp-retro-games</title>
     <style>
       .emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
       textarea.emscripten { font-family: monospace; width: 80%; }
@@ -61,8 +61,7 @@
       <input type="checkbox" id="resize">Resize canvas
       <input type="checkbox" id="pointerLock" checked>Lock/hide mouse pointer
       &nbsp;&nbsp;&nbsp;
-      <input type="button" value="Fullscreen" onclick="Module.requestFullscreen(document.getElementById('pointerLock').checked, 
-                                                                                document.getElementById('resize').checked)">
+      <input type="button" value="Fullscreen" onclick="open_fullscreen()">
     </div>
     
     <hr/>
@@ -145,6 +144,48 @@
       };
     </script>
     <script async type="text/javascript" src="cpp-retro-games.js"></script>
+    <script type="text/javascript">
+      // Work-around chromium autoplay policy
+      // https://github.com/emscripten-core/emscripten/issues/6511
+      function resumeAudio(e) {
+	  if (typeof Module === 'undefined'
+	      || typeof Module.SDL2 == 'undefined'
+	      || typeof Module.SDL2.audioContext == 'undefined')
+	      return;
+	  if (Module.SDL2.audioContext.state == 'suspended') {
+	      Module.SDL2.audioContext.resume();
+	  }
+	  if (Module.SDL2.audioContext.state == 'running') {
+	      document.getElementById('canvas').removeEventListener('click', resumeAudio);
+	      document.removeEventListener('keydown', resumeAudio);
+	  }
+      }
+      document.getElementById('canvas').addEventListener('click', resumeAudio);
+      document.addEventListener('keydown', resumeAudio);
+    </script>
+    <script type="text/javascript">
+      function open_fullscreen()
+      {
+        var canvas = document.getElementById('canvas');
+
+        if (canvas.requestFullscreen)
+        {
+          canvas.requestFullscreen();
+        }
+        else if (canvas.mozRequestFullScreen) // Firefox
+        {
+          canvas.mozRequestFullScreen();
+        }
+        else if (canvas.webkitRequestFullscreen) /* Chrome, Safari and Opera */
+        {
+          canvas.webkitRequestFullscreen();
+        }
+        else if (canvas.msRequestFullscreen) // IE/Edge
+        { 
+          canvas.msRequestFullscreen();
+        }
+      }
+    </script>
   </body>
 </html>
 
